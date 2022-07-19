@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cluster-init
+  labels:
+    app: cockroachdb
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+      - name: cluster-init
+        image: cockroachdb/cockroach:v20.1.8
+        imagePullPolicy: IfNotPresent
+        # ASM <=1.8 refer to k8s service 
+        # ASM >=1.9 can use locally?
+        command:
+          - "/cockroach/cockroach"
+          - "init"
+          - "--insecure"
+          - "--host=gke-crdb-0.db-crdb"
+      restartPolicy: OnFailure

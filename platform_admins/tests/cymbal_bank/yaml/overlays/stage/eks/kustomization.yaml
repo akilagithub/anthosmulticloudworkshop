@@ -1,0 +1,27 @@
+bases:
+  - ../../../base
+
+commonAnnotations:
+  sidecar.istio.io/userVolume: '[{"name": "cloud-ops-sa-volume", "secret": {"secretName": "cloud-ops-sa"}}]'
+  sidecar.istio.io/userVolumeMount: '[{"name": "cloud-ops-sa-volume", "mountPath": "/home/istio-proxy/.config/gcloud"}]'
+
+resources:
+  - cloud-ops-sa-secret.yaml
+  - namespace.yaml
+
+namespace: cymbal-bank-stage
+
+patchesStrategicMerge:
+  - balance-reader.yaml
+  - contacts.yaml
+  - frontend.yaml
+  - ledger-writer.yaml
+  - transaction-history.yaml
+  - userservice.yaml
+
+patchesJson6902:
+  - path: namespace-patch.yaml
+    target:
+      version: v1
+      kind: Namespace
+      name: cymbal-bank-stage

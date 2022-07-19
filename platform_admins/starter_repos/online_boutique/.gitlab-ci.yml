@@ -1,0 +1,332 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+include:
+  - project: "platform-admins/shared-cd"
+    file: "build-container-image.yaml"
+  - project: "platform-admins/shared-cd"
+    file: "build-manifest-file.yaml"
+  - project: "platform-admins/shared-cd"
+    file: "set-workload-identity-cloud-ops.yaml"
+  - project: "platform-admins/shared-cd"
+    file: "commit-to-acm.yaml"
+
+variables:
+  NAMESPACE: "ob"
+  APPLICATION: "online-boutique"
+  SVC_INGRESS: "frontend"
+  SERVICES: "ad cart redis checkout currency email frontend loadgenerator payment productcatalog recommendation shipping"
+
+stages:
+  - buildContainers
+  - buildConfigs
+  - commitToConfigRepo
+  - setupWorkloadIdentity
+
+ad-container:
+  stage: buildContainers
+  only:
+    changes:
+      - src/ad/**/*
+      # - services/ad/**/*
+      # - .gitlab-ci.yml
+  extends: .build-container-image
+  variables:
+    SVC: "ad"
+    DEPLOYMENT: "adservice"
+
+ad-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/ad/**/*
+      - services/ad/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "ad"
+    DEPLOYMENT: "adservice"
+    USE_OWN_IMAGE: "true"
+
+
+cart-container:
+  stage: buildContainers
+  only:
+    changes:
+      - src/cart/**/*
+      # - services/cart/**/*
+      # - .gitlab-ci.yml
+  extends: .build-container-image
+  variables:
+    SVC: "cart"
+    DEPLOYMENT: "cartservice"
+
+cart-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/cart/**/*
+      - services/cart/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "cart"
+    DEPLOYMENT: "cartservice"
+    USE_OWN_IMAGE: "true"
+
+checkout-container:
+  stage: buildContainers
+  only:
+    changes:
+      - src/checkout/**/*
+      # - services/checkout/**/*
+      # - .gitlab-ci.yml
+  extends: .build-container-image
+  variables:
+    SVC: "checkout"
+    DEPLOYMENT: "checkoutservice"
+
+checkout-build:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/checkout/**/*
+      - services/checkout/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "checkout"
+    DEPLOYMENT: "checkoutservice"
+    USE_OWN_IMAGE: "true"
+
+currency-container:
+  stage: buildContainers
+  only:
+    changes:
+      - src/currency/**/*
+      # - services/currency/**/*
+      # - .gitlab-ci.yml
+  extends: .build-container-image
+  variables:
+    SVC: "currency"
+    DEPLOYMENT: "currencyservice"
+
+currency-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/currency/**/*
+      - services/currency/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "currency"
+    DEPLOYMENT: "currencyservice"
+    USE_OWN_IMAGE: "true"
+
+email-container:
+  stage: buildContainers
+  only:
+    changes:
+      - src/email/**/*
+      # - services/email/**/*
+      # - .gitlab-ci.yml
+  extends: .build-container-image
+  variables:
+    SVC: "email"
+    DEPLOYMENT: "emailservice"
+
+email-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/email/**/*
+      - services/email/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "email"
+    DEPLOYMENT: "emailservice"
+    USE_OWN_IMAGE: "true"
+
+frontend-container:
+  stage: buildContainers
+  only:
+    changes:
+      - src/frontend/**/*
+      # - services/frontend/**/*
+      # - .gitlab-ci.yml
+  extends: .build-container-image
+  variables:
+    SVC: "frontend"
+    DEPLOYMENT: "frontend"
+
+frontend-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/frontend/**/*
+      - services/frontend/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "frontend"
+    DEPLOYMENT: "frontend"
+    USE_OWN_IMAGE: "true"
+
+# loadgenerator-container:
+#   stage: buildContainers
+#   only:
+#     changes:
+#       - src/loadgenerator/**/*
+#       - services/loadgenerator/**/*
+#       - .gitlab-ci.yml
+#   extends: .build-container-image
+#   variables:
+#     SVC: "loadgenerator"
+#     DEPLOYMENT: "loadgenerator"
+
+loadgenerator-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/loadgenerator/**/*
+      - services/loadgenerator/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "loadgenerator"
+    DEPLOYMENT: "loadgenerator"
+
+payment-container:
+  stage: buildContainers
+  only:
+    changes:
+      - src/payment/**/*
+      # - services/payment/**/*
+      # - .gitlab-ci.yml
+  extends: .build-container-image
+  variables:
+    SVC: "payment"
+    DEPLOYMENT: "paymentservice"
+
+payment-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/payment/**/*
+      - services/payment/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "payment"
+    DEPLOYMENT: "paymentservice"
+    USE_OWN_IMAGE: "true"
+
+productcatalog-container:
+  stage: buildContainers
+  only:
+    changes:
+      - src/productcatalog/**/*
+      # - services/productcatalog/**/*
+      # - .gitlab-ci.yml
+  extends: .build-container-image
+  variables:
+    SVC: "productcatalog"
+    DEPLOYMENT: "productcatalogservice"
+
+productcatalog-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/productcatalog/**/*
+      - services/productcatalog/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "productcatalog"
+    DEPLOYMENT: "productcatalogservice"
+    USE_OWN_IMAGE: "true"
+
+recommendation-container:
+  stage: buildContainers
+  only:
+    changes:
+      - src/recommendation/**/*
+      # - services/recommendation/**/*
+      # - .gitlab-ci.yml
+  extends: .build-container-image
+  variables:
+    SVC: "recommendation"
+    DEPLOYMENT: "recommendationservice"
+
+recommendation-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/recommendation/**/*
+      - services/recommendation/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "recommendation"
+    DEPLOYMENT: "recommendationservice"
+    USE_OWN_IMAGE: "true"
+
+shipping-container:
+  stage: buildContainers
+  only:
+    changes:
+      - src/shipping/**/*
+      # - services/shipping/**/*
+      # - .gitlab-ci.yml
+  extends: .build-container-image
+  variables:
+    SVC: "shipping"
+    DEPLOYMENT: "shippingservice"
+
+shipping-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - src/shipping/**/*
+      - services/shipping/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "shipping"
+    DEPLOYMENT: "shippingservice"
+    USE_OWN_IMAGE: "true"
+
+redis-config:
+  stage: buildConfigs
+  only:
+    changes:
+      - services/redis/**/*
+      - .gitlab-ci.yml
+  extends: .build-manifest-file
+  variables:
+    SVC: "redis"
+    DEPLOYMENT: "redis"
+
+commit-to-acm:
+  stage: commitToConfigRepo
+  extends: .commit-to-acm
+
+set-workload-identity:
+  stage: setupWorkloadIdentity
+  only:
+    changes:
+      - wi/*
+  extends: .set-workload-identity-cloud-ops

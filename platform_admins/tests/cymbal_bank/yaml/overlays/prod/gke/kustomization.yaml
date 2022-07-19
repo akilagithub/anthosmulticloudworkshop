@@ -1,0 +1,19 @@
+bases:
+  - ../../../base
+
+resources:
+  - namespace.yaml
+
+namespace: cymbal-bank-prod
+
+patchesJson6902:
+  - path: namespace-patch.yaml
+    target:
+      version: v1
+      kind: Namespace
+      name: cymbal-bank-prod
+  - path: default-ksa-patch.yaml
+    target:
+      version: v1
+      kind: ServiceAccount
+      name: default

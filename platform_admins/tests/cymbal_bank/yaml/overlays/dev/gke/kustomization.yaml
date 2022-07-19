@@ -1,0 +1,14 @@
+bases:
+  - ../../../base
+
+resources:
+  - namespace.yaml
+
+namespace: cymbal-bank-dev
+
+patchesJson6902:
+  - path: namespace-patch.yaml
+    target:
+      version: v1
+      kind: Namespace
+      name: cymbal-bank-dev

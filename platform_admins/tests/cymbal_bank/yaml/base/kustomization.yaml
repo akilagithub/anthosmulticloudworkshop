@@ -1,0 +1,13 @@
+resources:
+  - extras/jwt/jwt-secret.yaml
+  - kubernetes-manifests/accounts-db.yaml
+  - kubernetes-manifests/balance-reader.yaml
+  - kubernetes-manifests/config.yaml
+  - kubernetes-manifests/contacts.yaml
+  - kubernetes-manifests/frontend.yaml
+  - kubernetes-manifests/ledger-db.yaml
+  - kubernetes-manifests/ledger-writer.yaml
+  - kubernetes-manifests/loadgenerator.yaml
+  - kubernetes-manifests/transaction-history.yaml
+  - kubernetes-manifests/userservice.yaml
+  - istio-manifests/frontend-ingress.yaml
