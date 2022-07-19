@@ -16,7 +16,7 @@
 
 variable "name" { default = "aws-vpc-prod" }
 variable "cidr" { default = "10.100.0.0/16" }
-variable "azs" { default = ["us-west-2a", "us-west-2b"] }
+variable "azs" { default = ["eu-west-1a", "eu-west-1b"] }
 # EKS requires minimum two AZs and 2 subnets
 # https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html
 variable "private_subnets" { default = [
